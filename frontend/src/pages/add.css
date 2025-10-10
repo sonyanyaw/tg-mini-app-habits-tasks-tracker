@@ -1,0 +1,245 @@
+.add-task-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 800px;
+    min-height: 600px;
+    box-sizing: border-box;
+    padding: 20px;
+    /* background-color: #f9f9f9; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.add-task-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.cancel-adding-task {
+    align-self: flex-end;
+    text-align: end;
+}
+
+.cancel-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.item-type-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.item-type-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border: 1px solid #7e57c2;;
+    border-radius: 8px;
+    background-color: #7e57c2;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.item-type-button:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.02);
+}
+
+.item-type-label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.page-title {
+    margin: 0;
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+    align-self: center;
+    width: 100%;
+    text-align: center;
+}
+
+.header-buttons {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: 30% 70%;
+    /* align-items: center; */
+    /* padding: 15px 20px; */
+    background-color: #181818;
+    color: white;
+    min-width: 300px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.back-button {
+    background-color: #7e57c2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.back-button:hover {
+    background-color: #6d49b8;
+}
+
+.add-task-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #c5c5c5;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.add-task-input {
+    padding: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    background-color: white;
+}
+
+.add-task-input:focus {
+    border-color: #7e57c2;
+    box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+}
+
+.add-task-textarea {
+    padding: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    background-color: white;
+    line-height: 1.5;
+}
+
+.add-task-textarea:focus {
+    border-color: #7e57c2;
+    box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.cancel-form-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-form-button:hover {
+     background-color: #5a6268;
+}
+
+.add-task-button {
+    background-color: #7e57c2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-task-button:hover {
+     background-color: #6d49b8;
+}
+
+.add-task-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-height: 700px) {
+    .add-task-page {
+        min-height: 100vh;
+        max-height: none;
+    }
+    
+    .add-task-form {
+        gap: 20px;
+    }
+    
+    .add-task-input,
+    .add-task-textarea {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .add-task-page {
+        padding: 15px;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+    
+    .cancel-form-button,
+    .add-task-button {
+        width: 100%;
+        padding: 12px;
+    }
+}

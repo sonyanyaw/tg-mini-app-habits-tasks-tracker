@@ -1,0 +1,10 @@
+.mini-calendar {
+    display: grid;
+    width: 100%;
+    color: black;
+}
+.days-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    
+}
