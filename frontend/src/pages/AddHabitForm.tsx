@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { addHabit, type HabitCreate } from '../services/api';
+import { type HabitCreate, type Habit, addHabit } from '../services/api';
 import './add.css';
 
-
 interface AddHabitFormProps {
-  onHabitAdded: (habitData: HabitCreate) => void;
+  // onHabitAdded теперь должен принимать полный объект Habit
+  onHabitAdded: (habit: Habit) => void;
   onBack: () => void;
   onCancel?: () => void;
 }
@@ -19,25 +19,31 @@ const AddHabitForm: React.FC<AddHabitFormProps> = ({ onHabitAdded, onBack, onCan
     e.preventDefault();
     if (!newHabitTitle.trim()) return;
 
-    onHabitAdded({
+    // Создаём объект данных для отправки
+    const newHabitData: HabitCreate = {
       title: newHabitTitle,
       description: newHabitDescription,
       frequency: newHabitFrequency,
       duration: newHabitDuration,
-    });
+    };
+    console.log('add habit', newHabitData)
+    try {
+      // Вызываем API функцию addHabit
+      const response = await addHabit(newHabitData);
+      // Передаём полученный полный объект Habit в onHabitAdded
+      onHabitAdded(response.data);
+      console.log(response, response.data)
+      // Закрываем форму после успешного добавления
+      if (onCancel) {
+          onCancel();
+      }
+    } catch (error) {
+      console.error('Error adding habit:', error);
+      // Здесь можно добавить отображение ошибки пользователю
+    }
   };
-//     try {
-//       const response = await addHabit({
-//         title: newHabitTitle,
-//         description: newHabitDescription,
-//         frequency: newHabitFrequency,
-//         duration: newHabitDuration,
-//       });
-//       onHabitAdded(response.data);
-//     } catch (error) {
-//       console.error('Error adding habit:', error);
-//     }
-//   };
+
+  // Закомментированный код удалён
 
   const handleCancel = () => {
     if (onCancel) {
@@ -46,7 +52,7 @@ const AddHabitForm: React.FC<AddHabitFormProps> = ({ onHabitAdded, onBack, onCan
   };
 
   return (
-    <div className="add-task-page"> {/* Используем общий класс для стилизации */}
+    <div className="add-task-page">
       <div className="add-task-header">
         <div className="header-buttons">
             <button className="back-button" onClick={onBack}>

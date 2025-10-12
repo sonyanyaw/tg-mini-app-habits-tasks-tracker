@@ -7,7 +7,7 @@ class Habit(Base):
     __tablename__ = "habits"
 
 
-    id = Column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     title: Mapped[str] = mapped_column(String(100))
     description: Mapped[str | None] = mapped_column(String, nullable=True)
     frequency: Mapped[str] = mapped_column(String(50))
@@ -18,7 +18,12 @@ class Habit(Base):
 
     owner: Mapped["User"] = relationship(back_populates="habits")
 
-    completions: Mapped[list["HabitCompletion"]] = relationship("HabitCompletion", back_populates="habit", cascade="all, delete-orphan")
+    completions: Mapped[list["HabitCompletion"]] = relationship(
+        "HabitCompletion", 
+        back_populates="habit", 
+        cascade="all, delete-orphan",
+        lazy="selectin"
+    )
 
 
 class HabitCompletion(Base):
@@ -27,7 +32,7 @@ class HabitCompletion(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     habit_id: Mapped[int] = mapped_column(ForeignKey("habits.id"))
     completed: Mapped[bool] = mapped_column(Boolean, default=False)
-    completed_date: Mapped[date] = mapped_column(Date, default=date.today)
+    completion_date: Mapped[date] = mapped_column(Date, default=date.today)
 
     # Связи
     habit: Mapped["Habit"] = relationship(back_populates="completions")

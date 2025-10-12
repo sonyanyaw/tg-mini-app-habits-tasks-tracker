@@ -1,31 +1,45 @@
 import React, { useState } from 'react';
-import { addTask, type TaskCreate } from '../services/api';
+import { addTask, type TaskCreate, type Task } from '../services/api'; 
 import './add.css';
 
-
 interface AddTaskFormProps {
-  onTaskAdded: (taskData: TaskCreate) => void; // Принимаем данные для создания
+  onTaskAdded: (task: Task) => void;
   onBack: () => void;
   onCancel?: () => void;
 }
 
 const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel }) => {
+  // const [taskAdded, setTaskAdded] = useState({});
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [newTaskDueDate, setNewTaskDueDate] = useState(new Date().toISOString().split('T')[0]); 
 
   const handleAddTask = async (e: React.FormEvent) => {
+    console.log("handleAddTask called");
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
-    onTaskAdded({ title: newTaskTitle, description: newTaskDescription });
-};
-    // try {
-    //   const response = await addTask({ title: newTaskTitle, description: newTaskDescription });
-    //   onTaskAdded(response.data);
-    // } catch (error) {
-    //   console.error('Error adding task:', error);
-    // }
-//   };
+    // Создаём объект данных для отправки
+    const newTaskData: TaskCreate = {
+      title: newTaskTitle,
+      description: newTaskDescription,
+      due_date: newTaskDueDate,
+    };
+    console.log('add task', newTaskData)
+    try {
+      // Вызываем API функцию addTask
+      const response = await addTask(newTaskData);
+      // Передаём полученный полный объект Task в onTaskAdded
+      onTaskAdded(response.data);
+      // setTaskAdded(response.data)
+      // Закрываем форму после успешного добавления
+      if (onCancel) {
+          onCancel();
+      }
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
 
   const handleCancel = () => {
     if (onCancel) {
@@ -78,10 +92,19 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel
           />
         </div>
 
+        <div className="form-group">
+          <label htmlFor="task-due-date" className="form-label">Due Date</label>
+          <input
+            id="task-due-date"
+            type="date"
+            className="add-task-input"
+            value={newTaskDueDate}
+            onChange={(e) => setNewTaskDueDate(e.target.value)}
+            required
+          />
+        </div>
+
         <div className="form-actions">
-          {/* <button type="button" className="back-form-button" onClick={onBack}>
-            Back
-          </button> */}
           {onCancel && (
             <button type="button" className="cancel-form-button" onClick={handleCancel}>
               Cancel

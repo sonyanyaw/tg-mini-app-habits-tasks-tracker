@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './slices/authSlice';
 
-export const store = () => configureStore({
+// --- Создаём хранилище ОДИН РАЗ ---
+export const store = configureStore({
   reducer: {
     auth: authSlice,
   },
@@ -13,11 +14,16 @@ export const store = () => configureStore({
       },
     }),
 });
+// ---
 
-export type AppStore = ReturnType<typeof store>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+export type AppStore = typeof store; // Тип хранилища
+export type RootState = ReturnType<AppStore['getState']>; // Тип состояния
+export type AppDispatch = AppStore['dispatch']; // Тип диспатча
 
-import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux'; 
+// Типизированные хуки
+import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+// --- Экспортируем глобальный экземпляр ---
+export default store;

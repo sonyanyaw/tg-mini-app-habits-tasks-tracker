@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CalendarDay from './calendarday';
+import CalendarDay from './СalendarDay';
 import './minicalendar.css';
 
 interface DayInfo {

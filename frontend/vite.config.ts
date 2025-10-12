@@ -8,11 +8,12 @@ export default defineConfig({
     outDir: 'build',
   },
   server: {
+    
     port: 5173,
-    // Если бэкенд на другом порту, можно настроить прокси
+    allowedHosts: ['early-pets-retire.loca.lt'],
     proxy: {
       '/api': {
-        target: 'http://localhost:8000',
+        target: "https://habittasktracker-sysliks29.amvera.io/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

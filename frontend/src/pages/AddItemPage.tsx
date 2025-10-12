@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import AddTaskForm from './AddTaskForm';
 import AddHabitForm from './AddHabitForm';
-import { addTask, addHabit, type Task, type Habit } from '../services/api'; 
+import { type Task, type Habit } from '../services/api'; 
 import './add.css';
 
 interface AddItemPageProps {
@@ -25,11 +25,13 @@ const AddItemPage: React.FC<AddItemPageProps> = ({ onTaskAdded, onHabitAdded, on
     setItemType(null);
   };
 
-  const handleTaskAdded = async (taskData: Omit<Task, 'id' | 'completed' | 'owner_id'>) => {
+  // Обновляем handleTaskAdded
+  const handleTaskAdded = async (taskData: Task) => { // Принимаем TaskCreate, а не Omit<Task, ...>
+    // console.log("handleTaskAdded called", taskData);
     try {
-      const response = await addTask({ title: taskData.title, description: taskData.description });
+      // const response = await addTask(taskData);
       if (onTaskAdded) {
-        onTaskAdded(response.data);
+        onTaskAdded(taskData);
       }
       if (onCancel) {
         onCancel();
@@ -39,16 +41,11 @@ const AddItemPage: React.FC<AddItemPageProps> = ({ onTaskAdded, onHabitAdded, on
     }
   };
 
-  const handleHabitAdded = async (habitData: Omit<Habit, 'id' | 'is_active' | 'owner_id' | 'created_date' | 'completions'>) => {
+  const handleHabitAdded = async (habitData: Habit) => {
+    // console.log("handleHabitAdded called", habitData);
     try {
-      const response = await addHabit({
-        title: habitData.title,
-        description: habitData.description,
-        frequency: habitData.frequency,
-        duration: habitData.duration,
-      });
       if (onHabitAdded) {
-        onHabitAdded(response.data);
+        onHabitAdded(habitData);
       }
       if (onCancel) {
         onCancel();
@@ -87,7 +84,7 @@ const AddItemPage: React.FC<AddItemPageProps> = ({ onTaskAdded, onHabitAdded, on
 
       <div className="item-type-selector">
         <button className="item-type-button" onClick={handleSelectTask}>
-          <div className="item-type-icon">📋</div> {/* Добавим иконки */}
+          <div className="item-type-icon">📋</div>
           <div className="item-type-label">Task</div>
         </button>
         <button className="item-type-button" onClick={handleSelectHabit}>

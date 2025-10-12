@@ -6,20 +6,11 @@ import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 // import AddTaskPage from './pages/Add';
 import AddItemPage from './pages/AddItemPage';
-import AddHabitForm from './pages/AddHabitForm';
-import AddTaskForm from './pages/AddTaskForm';
 
-const handleTaskAdded = (task: any) => {
-  console.log('Task added:', task);
-};
-
-const handleHabitAdded = (habit: any) => {
-  console.log('Habit added:', habit);
-};
 
 function App() {
   return (
-    <Provider store={store()}>
+    <Provider store={store}>
       <Router>
         <div className="App">
           <Routes>

@@ -1,13 +1,3 @@
-# fastapi
-# uvicorn
-# sqlalchemy
-# alembic
-# Pydantic
-# python-dotenv
-# aiogram
-# python-jose
-# cryptography
-
 fastapi
 uvicorn[standard]
 sqlalchemy[asyncio]
@@ -19,5 +9,4 @@ pydantic-settings
 python-jose[cryptography]
 passlib[bcrypt]
 python-dotenv
-# aiohttp
 aiogram 

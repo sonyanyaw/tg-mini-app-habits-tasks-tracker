@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosHeaders, type InternalAxiosRequestConfig  } from 'axios';
+import store from '../store';
 
 // Определяем тип User
 export interface User {
@@ -11,13 +12,7 @@ export interface User {
 
 // Определяем тип TelegramInitData (плоская структура, как отправляется на бэкенд)
 export interface TelegramInitData {
-  id: string;
-  first_name: string;
-  last_name?: string;
-  username?: string;
-  photo_url?: string;
-  auth_date: string; // или number, в зависимости от того, как обрабатываете
-  hash: string;
+  init_data_raw: string;
 }
 
 // Добавим типы для задач, если планируете их использовать
@@ -27,11 +22,20 @@ export interface Task {
   description?: string;
   completed: boolean;
   owner_id: number;
+  due_date: string;
 }
 
 export interface TaskCreate {
   title: string;
   description?: string;
+  due_date: string;
+}
+
+export interface TaskUpdate {
+  title?: string;
+  description?: string;
+  completed?: boolean;
+  due_date?: string; 
 }
 
 export interface Habit {
@@ -57,21 +61,53 @@ export interface HabitCompletion {
   id: number;
   habit_id: number;
   completed: boolean;
-  completed_date: string; 
+  completion_date: string; 
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Теперь типизируем authenticateTelegram с TelegramInitData
+// Перехватчик запросов: добавляем telegram_id в заголовок
+api.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    // Получаем текущее состояние из store
+    const state = store.getState();
+    // Проверяем, что user существует и у него есть telegram_id
+    const telegramId = state.auth.user?.telegram_id;
+
+    if (telegramId) {
+      // Добавляем заголовок
+      const headers = AxiosHeaders.from(config.headers || {});
+      headers.set('X-Telegram-ID', telegramId);
+      config.headers = headers; // Присваиваем обратно
+      // if (config.headers && typeof config.headers.set === 'function') {
+      //   // Если да, используем метод set
+      //   config.headers.set('X-Telegram-ID', telegramId);
+      // }
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export const authenticateTelegram = (data: TelegramInitData) => api.post<User>('/auth/telegram', data);
 
-export const fetchTasks = () => api.get<Task[]>('/tasks');
-export const addTask = (task: TaskCreate) => api.post<Task>('/tasks', task);
+export const fetchTasks = () => api.get<Task[]>('/tasks/');
 
+export const addTask = (task: TaskCreate) => api.post<Task>('/tasks/', task);
+
+export const updateTask = (taskId: number, taskUpdate: TaskUpdate) => api.put<Task>(`/tasks/${taskId}`, taskUpdate);
+
+export const updateTaskCompletion = (taskId: number, completed: boolean) => 
+  api.put<Task>(`/tasks/${taskId}`, { completed });
+
+export const deleteTask = (taskId: number) => api.delete(`/tasks/${taskId}`);
 
 // Функции для привычек
 export const fetchHabits = (startDate: string, endDate: string) => 
@@ -79,8 +115,9 @@ export const fetchHabits = (startDate: string, endDate: string) =>
 
 export const addHabit = (habit: HabitCreate) => api.post<Habit>('/habits/', habit);
 
-export const updateHabitCompletion = (habitId: number, date: string, completed: boolean) => 
-  api.post<HabitCompletion>(`/habits/${habitId}/completion`, { date, completed });
+export const updateHabitCompletion = (habitId: number, completion_date: string, completed: boolean) => 
+  api.post<HabitCompletion>(`/habits/${habitId}/completion/`, { habit_id: habitId, completion_date, completed });
 
+export const deleteHabit = (habitId: number) => api.delete(`/habits/${habitId}`);
 
 export default api;

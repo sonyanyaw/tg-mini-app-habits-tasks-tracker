@@ -1,5 +1,3 @@
-// frontend/src/pages/HabitSkeleton.tsx (обновлённый)
-
 import React, { useState, useEffect } from 'react';
 import { fetchHabits, updateHabitCompletion } from '../../services/api';
 import { useAppSelector } from '../../store';
@@ -9,7 +7,7 @@ interface HabitCompletion {
   id: number;
   habit_id: number;
   completed: boolean;
-  completed_date: string; // ISO string
+  completion_date: string;
 }
 
 interface Habit {
@@ -30,9 +28,12 @@ interface HabitSkeletonProps {
     monthday: number;
     date: Date;
   }>;
+  habits: Habit[];
+  onDeleteHabit?: (habitId: number) => void;
+  // onHabitToggle?: (habitId: number, date: Date) => void; // <-- Добавьте, если решите передавать логику из Dashboard
 }
 
-const HabitSkeleton: React.FC<HabitSkeletonProps> = ({ weekDays }) => {
+const HabitSkeleton: React.FC<HabitSkeletonProps> = ({ weekDays, onDeleteHabit }) => {
   const { user } = useAppSelector((state) => state.auth);
   const [habits, setHabits] = useState<Habit[]>([]);
 
@@ -58,26 +59,28 @@ const HabitSkeleton: React.FC<HabitSkeletonProps> = ({ weekDays }) => {
   }, [user]);
 
   const handleHabitToggle = async (habitId: number, date: Date) => {
+    console.log('handle')
     if (!user) return;
 
     const dateString = date.toISOString().split('T')[0]; // Формат YYYY-MM-DD
     // Найдём текущий статус выполнения для этой даты
     const habit = habits.find(h => h.id === habitId);
+    console.log(habit, habitId)
     if (!habit) return;
 
-    const existingCompletion = habit.completions.find(c => c.completed_date === dateString);
+    const existingCompletion = habit.completions.find(c => c.completion_date === dateString);
     const newCompletedStatus = !existingCompletion || !existingCompletion.completed;
-
+    console.log(dateString, existingCompletion, newCompletedStatus)
     try {
       // Обновляем на бэкенде
       const response = await updateHabitCompletion(habitId, dateString, newCompletedStatus);
-
+      console.log(response)
       // Обновляем локальное состояние
       setHabits(prevHabits =>
         prevHabits.map(habit => {
           if (habit.id === habitId) {
             // Проверяем, существовало ли выполнение ранее
-            const existingIndex = habit.completions.findIndex(c => c.completed_date === dateString);
+            const existingIndex = habit.completions.findIndex(c => c.completion_date === dateString);
             let newCompletions;
 
             if (existingIndex > -1) {
@@ -104,7 +107,7 @@ const HabitSkeleton: React.FC<HabitSkeletonProps> = ({ weekDays }) => {
     const dateString = date.toISOString().split('T')[0];
     const habit = habits.find(h => h.id === habitId);
     if (!habit) return false;
-    const completion = habit.completions.find(c => c.completed_date === dateString);
+    const completion = habit.completions.find(c => c.completion_date === dateString);
     return completion ? completion.completed : false;
   };
 
@@ -114,6 +117,19 @@ const HabitSkeleton: React.FC<HabitSkeletonProps> = ({ weekDays }) => {
         <div key={habit.id} className="habit-block">
           <div className="habit-header">
             <span className="habit-title">{habit.title}</span>
+            {onDeleteHabit && ( 
+              <div className='habit-delete'>
+                <button 
+                  className="delete-button" 
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    onDeleteHabit(habit.id); 
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            )}
           </div>
           <div className="habit-checks-row">
             {weekDays.map((day, index) => (

@@ -19,3 +19,53 @@
 .habit-check {
     text-align: center;
 }
+
+.habit-header {
+  display: flex;
+  justify-content: space-between; /* Распределяем пространство между заголовком и кнопкой */
+  align-items: center; /* Центрируем по вертикали */
+  margin-bottom: 8px;
+}
+
+.habit-title {
+  font-size: 1rem;
+  /* font-weight: bold; */
+  color: #ffffff;
+}
+
+/* --- Стили для кнопки удаления привычки --- */
+.habit-delete-button {
+  background-color: transparent; /* Прозрачный фон */
+  border: none; /* Без рамки */
+  color: #888; /* Серый цвет текста */
+  cursor: pointer; /* Курсор-рука */
+  font-size: 1rem; /* Размер шрифта */
+  padding: 2px 6px; /* Внутренний отступ */
+  border-radius: 50%; /* Круглая форма */
+  width: 24px; /* Ширина */
+  height: 24px; /* Высота */
+  display: flex; /* Flexbox для центрирования */
+  align-items: center; /* Центрируем по вертикали */
+  justify-content: center; /* Центрируем по горизонтали */
+  transition: background-color 0.2s, color 0.2s; /* Плавный переход */
+}
+
+.habit-delete-button:hover {
+  background-color: #f0f0f0; /* Светло-серый фон при наведении */
+  color: #333; /* Темный цвет текста при наведении */
+}
+
+.delete-button {
+    font-size: 10pt;
+}
+
+.habit-check--completed {
+  /* background-color: #7e57c2; */
+  color: white;
+}
+
+.no-habits {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+}

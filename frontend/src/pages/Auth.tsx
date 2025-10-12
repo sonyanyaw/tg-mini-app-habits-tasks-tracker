@@ -5,11 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import './auth.css';
 
 const Auth = () => {
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  // useTelegramAuth теперь вызывает аутентификацию
   useTelegramAuth();
 
   // Если пользователь успешно аутентифицирован, перенаправляем
@@ -19,10 +18,7 @@ const Auth = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Пока не аутентифицирован и нет ошибки
   if (isAuthenticated) {
-    // Это условие сработает, если пользователь уже аутентифицирован, но случайно попал на /auth
-    // Но useEffect выше должен был его перенаправить, так что этот случай редкий
     return null; 
   }
 
@@ -35,6 +31,7 @@ const Auth = () => {
     );
   }
 
+  // Отображаем состояние загрузки только если не аутентифицирован и нет ошибки
   return (
     <div className='auth-page'>
       <h2>Авторизация через Telegram...</h2>
