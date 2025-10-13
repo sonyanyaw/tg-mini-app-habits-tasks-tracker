@@ -66,8 +66,7 @@
     │   └── ...
     ├── .gitignore              # Игнорируемые файлы
     └── README.md               # Этот файл
-
----
+```
 
 ## Начало работы (локально)
 
@@ -76,37 +75,37 @@
 ```bash
 git clone https://github.com/sonyanyaw/tg-mini-app-habits-tasks-tracker.git
 cd habit-task-tracker
-
+```
 ### **2. Настройка бэкенда**
 
 1. Перейдите в папку backend:
 ```bash
 cd backend
-
+```
 2. Создайте виртуальное окружение:
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
 # или
 venv\Scripts\activate     # Windows
-
+```
 3. Установите зависимости:
 ```bash
 pip install -r requirements.txt
-
+```
 4. Создайте файл '.env' и укажите переменные окружения:
 ```env
 DATABASE_URL=postgresql+asyncpg://postgres:ваш_пароль@ваш_хост:5432/ваша_бд
 TELEGRAM_BOT_TOKEN=ваш_токен_бота
-
+```
 5. Примените миграции Alembic:
 ```bash
 alembic upgrade head
-
+```
 6. Запустите сервер:
 ```bash
 uvicorn app.main:app --reload
-
+```
 Сервер будет доступен по адресу http://localhost:8000.
 
 ### **3. Настройка фронтенда**
@@ -116,19 +115,19 @@ uvicorn app.main:app --reload
 2. Перейдите в папку frontend:
 ```bash
 cd frontend
-
+```
 3. Установите зависимости:
 ```bash
 npm install
-
+```
 4. Создайте файл '.env' и укажите переменные окружения:
 ```env
 VITE_API_BASE_URL=http://localhost:8000
-
+```
 5. Запустите сервер разработки:
 ```bash
 npm run dev
-
+```
 Фронтенд будет доступен по адресу http://localhost:5173.
 
 ## Деплой 
