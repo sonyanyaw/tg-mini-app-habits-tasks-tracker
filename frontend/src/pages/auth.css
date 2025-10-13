@@ -5,4 +5,43 @@
     align-items: center;
     text-align: center;
     margin: 50% auto;
+    max-height: 800px;
+    /* box-sizing: border-box; */
+}
+
+/* .auth-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+.auth-page h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.auth-page p {
+  margin-bottom: 20px;
+  color: #666;
+} */
+
+/* --- Стили для кнопки "Open in Telegram" --- */
+.open-in-telegram-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #0088cc; /* Цвет Telegram */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.open-in-telegram-button:hover {
+  background-color: #0077b3; /* Темнее при наведении */
 }
