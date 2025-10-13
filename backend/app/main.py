@@ -9,7 +9,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173", 
-        "https://early-pets-retire.loca.lt"
+        "https://habit-task-tracker-sonyanyaw.vercel.app"
     ],
     allow_methods=["*"],
     allow_credentials=True,

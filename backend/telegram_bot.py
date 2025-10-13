@@ -1,7 +1,6 @@
-# backend/telegram_bot.py
-
 import asyncio
 import logging
+import os
 from aiogram import Bot, Dispatcher, Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
@@ -11,12 +10,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # --- Конфигурация ---
-# ВАЖНО: Замените 'YOUR_BOT_TOKEN_HERE' на токен, полученный от @BotFather
-BOT_TOKEN = "8308372223:AAG01TsA8xIZ2V8w9J3KLaEa14I_ARAI8G8"
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-# ВАЖНО: Замените на URL вашего фронтенда
-# Это может быть ваш ngrok/localtunnel URL или финальный домен
-WEBAPP_URL = "https://early-pets-retire.loca.lt" # <-- ЗАМЕНИТЕ НА СВОЙ URL
+WEBAPP_URL = os.getenv("WEBAPP_URL")
 
 # --- Инициализация бота и диспетчера ---
 bot = Bot(token=BOT_TOKEN)
