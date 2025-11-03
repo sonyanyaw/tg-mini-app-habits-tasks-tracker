@@ -58,16 +58,10 @@ const Auth = () => {
   // Отображаем состояние загрузки только если не аутентифицирован и нет ошибки
   return (
     <div className='auth-page'>
-      <h2>Авторизация через Telegram...</h2>
-      <p>Пожалуйста, подождите...</p>
-      <a 
-        href="https://t.me/habit_n_task_tracker_bot?start=start" // <-- Замените на вашу ссылку
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="open-in-telegram-button"
-      >
-        Open in Telegram
-      </a>
+      <div className="loading-screen">
+        <div className="spinner"></div>
+        <p>Загрузка...</p>
+      </div>
     </div>
   );
 };
