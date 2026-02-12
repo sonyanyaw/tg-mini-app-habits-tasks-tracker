@@ -1,77 +1,90 @@
-import React, { useState } from 'react';
-import CalendarDay from './СalendarDay';
-import './minicalendar.css';
+import React from "react";
+import CalendarDay from "./CalendarDay";
+import { formatMonthYearRange } from "../../utils/date";
+import { useMiniCalendar } from "../../hooks/useMiniCalendar";
+import { useSwipe } from "../../hooks/useSwipe";
+import { ArrowIcon } from "../ui/ArrowIcon";
 
-interface DayInfo {
-  weekday: number;
-  monthday: number;
-  date: Date;
-}
+import "./minicalendar.css";
 
 interface MiniCalendarProps {
   onDateSelect?: (date: Date) => void;
 }
 
 const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect }) => {
-  const date = new Date();
-  const [activeDay, setActiveDay] = useState<Date>(date);
+  const {
+    weekDays,
+    isDayActive,
+    isAnimating,
+    isCurrentWeekValue,
+    animationDirection,
+    goToNextWeek,
+    goToPrevWeek,
+    goToCurrentWeek,
+    handleDayClick,
+  } = useMiniCalendar({ onDateSelect });
 
-  // Генерируем данные для 7 дней (текущая неделя)
-  const generateWeekDays = (): DayInfo[] => {
-    const days: DayInfo[] = [];
-    const today = new Date();
-    
-    // Находим понедельник текущей недели
-    const monday = new Date(today);
-    const day = today.getDay();
-    const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-    monday.setDate(diff);
-    
-    for (let i = 0; i < 7; i++) {
-      const currentDay = new Date(monday);
-      currentDay.setDate(monday.getDate() + i);
-      
-      days.push({
-        weekday: currentDay.getDay(),
-        monthday: currentDay.getDate(),
-        date: new Date(currentDay)
-      });
-    }
-    
-    return days;
-  };
-
-  const weekDays = generateWeekDays();
-
-  const handleDayClick = (monthday: number) => {
-    const clickedDay = weekDays.find(day => day.monthday === monthday);
-    if (clickedDay) {
-      setActiveDay(clickedDay.date);
-      if (onDateSelect) {
-        onDateSelect(clickedDay.date);
-      }
-    }
-  };
-
-  const isDayActive = (day: DayInfo): boolean => {
-    return day.date.getDate() === activeDay.getDate() && 
-           day.date.getMonth() === activeDay.getMonth() && 
-           day.date.getFullYear() === activeDay.getFullYear();
-  };
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
+    onSwipeLeft: goToNextWeek,
+    onSwipeRight: goToPrevWeek,
+    threshold: 50,
+  });
 
   return (
     <div className="mini-calendar">
-      <div className="days-row">
-        {weekDays.map((day, index) => (
-          <div key={index} className={`day-${day.weekday}`}>
-            <CalendarDay 
-              weekday={day.weekday} 
-              monthday={day.monthday}
-              isActive={isDayActive(day)}
-              onDayClick={handleDayClick}
-            />
+      <div className="calendar-header">
+        <h3 className="month-year-display">{formatMonthYearRange(weekDays)}</h3>
+        {!isCurrentWeekValue && (
+          <button
+            className="current-week-button"
+            onClick={goToCurrentWeek}
+            disabled={isAnimating}
+          >
+            Вернуться к текущей неделе
+          </button>
+        )}
+      </div>
+
+      <div className="calendar-navigation">
+        <button
+          className="nav-button prev-week"
+          onClick={goToPrevWeek}
+          disabled={isAnimating}
+          aria-label="Предыдущая неделя"
+        >
+          <ArrowIcon direction="left" />
+        </button>
+
+        <div
+          className={`days-container ${animationDirection ? `animate-${animationDirection}` : ""}`}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="days-row">
+            {weekDays.map((day) => (
+              // <div key={index} className={`day-${day.weekday}`}>
+              <CalendarDay
+                key={day.date.toISOString()}
+                className={`day-${day.weekday}`}
+                weekday={day.weekday}
+                monthday={day.monthday}
+                isActive={isDayActive(day)}
+                onDayClick={() => handleDayClick(day.date)}
+              />
+              // </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        <button
+          className="nav-button next-week"
+          onClick={goToNextWeek}
+          disabled={isAnimating}
+          aria-label="Следующая неделя"
+        >
+          <ArrowIcon direction="right" />
+        </button>
       </div>
     </div>
   );

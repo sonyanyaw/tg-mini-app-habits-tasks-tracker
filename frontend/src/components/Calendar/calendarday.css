@@ -1,37 +1,45 @@
+.day-0,
+.day-1,
+.day-2,
+.day-3,
+.day-4,
+.day-5,
+.day-6 {
+  flex: 1;
+  min-width: 0;
+}
+
 .calendar-day {
-    /* var(--tg-theme-text-color); */
-    display: grid;
-    color: rgb(198, 198, 198);
-    width: auto;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-    
+  display: grid;
+  color: rgb(198, 198, 198);
+  width: auto;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  border: 1px rgba(179, 179, 179, 0) solid;
 }
 .calendar-day:hover {
-    border: 1px rgba(179, 179, 179, 0.656) solid;
-    border-radius: 10px;
-    cursor: pointer;
+  border: 1px rgba(179, 179, 179, 0.656) solid;
+  border-radius: 10px;
+  cursor: pointer;
 }
 .calendar-day--active {
-  /* background-color: #1a60aa; */
   background-color: blueviolet;
   color: white;
   border-color: rgb(130, 26, 227);
-  /* border-color: #0056b3; */
   border-radius: 10px;
-  
+
   .weekday-title {
     color: rgb(255, 255, 255);
-}
+  }
 }
 .weekday-title {
-    color: gray;
+  color: gray;
 }
 .day-body {
-    display: grid;
-    justify-content: center;
+  display: grid;
+  justify-content: center;
 }
 .day-hastasks {
   height: 4px;
@@ -42,6 +50,5 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  /* background-color: #ff6b6b; */
   margin: 0 auto;
 }

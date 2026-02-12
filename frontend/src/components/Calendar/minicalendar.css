@@ -1,10 +1,144 @@
 .mini-calendar {
-    display: grid;
-    width: 100%;
-    color: black;
+  display: grid;
+  width: 100%;
+  color: black;
+  position: relative;
+  max-width: 100%;
+  padding: 10px 0;
+  box-sizing: border-box;
 }
+
 .days-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-navigation {
+  display: flex;
+  left: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.nav-button {
+  background: none; /*#795890;*/
+  border: 1px solid #72727200;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  pointer-events: auto;
+  flex-shrink: 0;
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.days-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.days-row {
+  display: flex;
+  gap: 2px;
+  padding: 0;
+  overflow-x: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.current-week-button {
+  background-color: #7e57c2;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  pointer-events: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.current-week-button:hover:not(:disabled) {
+  background-color: #6d49b8;
+}
+
+.current-week-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+path:hover {
+  fill: #6d49b8;
+}
+
+.days-container.animate-left {
+  animation: slideLeft 0.3s ease-in-out forwards;
+}
+
+.days-container.animate-right {
+  animation: slideRight 0.3s ease-in-out forwards;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-10px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(-100%);
+    opacity: 0.5;
+  }
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0.5;
+  }
+}
+
+.days-container:not(.animate-left):not(.animate-right) {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  gap: 10px;
+}
+
+.month-year-display {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  text-align: left;
 }
