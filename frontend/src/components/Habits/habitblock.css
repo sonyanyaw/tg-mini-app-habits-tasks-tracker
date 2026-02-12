@@ -1,29 +1,29 @@
 .habit-block {
-    display: grid;
-    width: 100%;
-    border: 1px blueviolet solid;
-    border-radius: 10px;
-    background-color: blueviolet;
-    margin: 10px 0;
-    /* gap: 10px; */
-    padding: 5px 0;
-    box-sizing: border-box;
+  display: grid;
+  width: 100%;
+  border: 1px blueviolet solid;
+  border-radius: 10px;
+  background-color: blueviolet;
+  margin: 10px 0;
+  /* gap: 10px; */
+  padding: 5px 0;
+  box-sizing: border-box;
 }
 .habit-header {
-    padding: 0 10px;
+  padding: 0 10px;
 }
 .habit-checks-row {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 .habit-check {
-    text-align: center;
+  text-align: center;
 }
 
 .habit-header {
   display: flex;
-  justify-content: space-between; /* Распределяем пространство между заголовком и кнопкой */
-  align-items: center; /* Центрируем по вертикали */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
 }
 
@@ -33,30 +33,35 @@
   color: #ffffff;
 }
 
-/* --- Стили для кнопки удаления привычки --- */
 .habit-delete-button {
-  background-color: transparent; /* Прозрачный фон */
-  border: none; /* Без рамки */
-  color: #888; /* Серый цвет текста */
-  cursor: pointer; /* Курсор-рука */
-  font-size: 1rem; /* Размер шрифта */
-  padding: 2px 6px; /* Внутренний отступ */
-  border-radius: 50%; /* Круглая форма */
-  width: 24px; /* Ширина */
-  height: 24px; /* Высота */
-  display: flex; /* Flexbox для центрирования */
-  align-items: center; /* Центрируем по вертикали */
-  justify-content: center; /* Центрируем по горизонтали */
-  transition: background-color 0.2s, color 0.2s; /* Плавный переход */
+  background-color: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 .habit-delete-button:hover {
-  background-color: #f0f0f0; /* Светло-серый фон при наведении */
-  color: #333; /* Темный цвет текста при наведении */
+  background-color: #f0f0f0;
+  color: #333;
 }
 
 .delete-button {
-    font-size: 10pt;
+  font-size: 10pt;
+}
+
+.habit-check {
+  cursor: pointer;
 }
 
 .habit-check--completed {

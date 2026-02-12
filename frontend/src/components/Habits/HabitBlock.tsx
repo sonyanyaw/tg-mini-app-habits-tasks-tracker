@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { fetchHabits, updateHabitCompletion } from '../../services/api';
-import { useAppSelector } from '../../store';
-import './habitblock.css'; // Убедитесь, что стили подходят
+import React from "react";
+import { formatLocalDate } from "../../utils/date";
+
+import "./habitblock.css";
 
 interface HabitCompletion {
   id: number;
@@ -19,137 +19,73 @@ interface Habit {
   duration: number;
   owner_id: number;
   created_date: string;
-  completions: HabitCompletion[]; // Теперь это массив выполнений
+  completions: HabitCompletion[];
 }
 
 interface HabitSkeletonProps {
-  weekDays: Array<{
+  weekDays: {
     weekday: number;
     monthday: number;
     date: Date;
-  }>;
+  }[];
   habits: Habit[];
+  onToggle: (habitId: number, date: Date) => void;
   onDeleteHabit?: (habitId: number) => void;
-  // onHabitToggle?: (habitId: number, date: Date) => void; // <-- Добавьте, если решите передавать логику из Dashboard
 }
 
-const HabitSkeleton: React.FC<HabitSkeletonProps> = ({ weekDays, onDeleteHabit }) => {
-  const { user } = useAppSelector((state) => state.auth);
-  const [habits, setHabits] = useState<Habit[]>([]);
-
-  // Форматируем даты для API
-  const getStartEndDate = () => {
-    const today = new Date();
-    const start = new Date(today.getFullYear(), today.getMonth(), 1); // Первый день месяца
-    const end = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Последний день месяца
-    return {
-      start: start.toISOString().split('T')[0],
-      end: end.toISOString().split('T')[0],
-    };
-  };
-
-  // Загрузка привычек при монтировании и при изменении месяца (если нужно)
-  useEffect(() => {
-    if (!user) return;
-
-    const { start, end } = getStartEndDate();
-    fetchHabits(start, end)
-      .then(response => setHabits(response.data))
-      .catch(error => console.error('Error fetching habits:', error));
-  }, [user]);
-
-  const handleHabitToggle = async (habitId: number, date: Date) => {
-    console.log('handle')
-    if (!user) return;
-
-    const dateString = date.toISOString().split('T')[0]; // Формат YYYY-MM-DD
-    // Найдём текущий статус выполнения для этой даты
-    const habit = habits.find(h => h.id === habitId);
-    console.log(habit, habitId)
-    if (!habit) return;
-
-    const existingCompletion = habit.completions.find(c => c.completion_date === dateString);
-    const newCompletedStatus = !existingCompletion || !existingCompletion.completed;
-    console.log(dateString, existingCompletion, newCompletedStatus)
-    try {
-      // Обновляем на бэкенде
-      const response = await updateHabitCompletion(habitId, dateString, newCompletedStatus);
-      console.log(response)
-      // Обновляем локальное состояние
-      setHabits(prevHabits =>
-        prevHabits.map(habit => {
-          if (habit.id === habitId) {
-            // Проверяем, существовало ли выполнение ранее
-            const existingIndex = habit.completions.findIndex(c => c.completion_date === dateString);
-            let newCompletions;
-
-            if (existingIndex > -1) {
-              // Обновляем существующую запись
-              newCompletions = [...habit.completions];
-              newCompletions[existingIndex] = response.data;
-            } else {
-              // Добавляем новую запись
-              newCompletions = [...habit.completions, response.data];
-            }
-
-            return { ...habit, completions: newCompletions };
-          }
-          return habit;
-        })
-      );
-    } catch (error) {
-      console.error('Error updating habit completion:', error);
-    }
-  };
-
-  // Функция для проверки, выполнена ли привычка в определенный день
-  const isHabitCompleted = (habitId: number, date: Date): boolean => {
-    const dateString = date.toISOString().split('T')[0];
-    const habit = habits.find(h => h.id === habitId);
-    if (!habit) return false;
-    const completion = habit.completions.find(c => c.completion_date === dateString);
-    return completion ? completion.completed : false;
+const HabitSkeleton: React.FC<HabitSkeletonProps> = ({
+  weekDays,
+  habits,
+  onToggle,
+  onDeleteHabit,
+}) => {
+  const isCompleted = (habit: Habit, date: Date) => {
+    const dateString = formatLocalDate(date);
+    return habit.completions?.some(
+      (c) => c.completion_date === dateString && c.completed,
+    );
   };
 
   return (
     <div className="habits-container">
-      {habits.map(habit => (
+      {habits.map((habit) => (
         <div key={habit.id} className="habit-block">
           <div className="habit-header">
             <span className="habit-title">{habit.title}</span>
-            {onDeleteHabit && ( 
-              <div className='habit-delete'>
-                <button 
-                  className="delete-button" 
-                  onClick={(e) => {
-                    e.stopPropagation(); 
-                    onDeleteHabit(habit.id); 
-                  }}
-                >
-                  X
-                </button>
-              </div>
+
+            {onDeleteHabit && (
+              <button
+                className="delete-button"
+                onClick={() => onDeleteHabit(habit.id)}
+              >
+                X
+              </button>
             )}
           </div>
+
           <div className="habit-checks-row">
-            {weekDays.map((day, index) => (
-              <div
-                key={`${habit.id}-${index}`} // Уникальный ключ для каждого дня и привычки
-                className={`habit-check habit-check-${index + 1} ${
-                  isHabitCompleted(habit.id, day.date) ? 'habit-check--completed' : ''
-                }`}
-                onClick={() => handleHabitToggle(habit.id, day.date)}
-              >
-                {isHabitCompleted(habit.id, day.date) ? '✓' : 'X'}
-              </div>
-            ))}
+            {weekDays.map((day) => {
+              const completed = isCompleted(habit, day.date);
+
+              return (
+                <div
+                  key={`${habit.id}-${day.date}`}
+                  className={`habit-check ${
+                    completed ? "habit-check--completed" : ""
+                  }`}
+                  onClick={() => onToggle(habit.id, day.date)}
+                >
+                  {completed ? "✓" : "X"}
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}
 
       {habits.length === 0 && (
         <div className="no-habits">
-          <p>No habits yet. Add your first habit!</p>
+          <p>No habits yet.</p>
         </div>
       )}
     </div>
