@@ -7,17 +7,19 @@ import {
   type Task,
 } from "../services/api";
 import { formatLocalDate } from "../utils/date";
+import { toast } from "../utils/toast";
 
 export const useTasks = (selectedDate: Date, enabled: boolean) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [loading, setLoading] = useState(true);
   const dateString = formatLocalDate(selectedDate);
 
   useEffect(() => {
     if (!enabled) return;
 
+    setLoading(true);
     const load = async () => {
       const res = await fetchTasksByDate(dateString);
-
       setTasks(
         res.data.map((task) => ({
           ...task,
@@ -26,6 +28,7 @@ export const useTasks = (selectedDate: Date, enabled: boolean) => {
             false,
         })),
       );
+      setLoading(false);
     };
 
     load();
@@ -74,16 +77,23 @@ export const useTasks = (selectedDate: Date, enabled: boolean) => {
           t.id === taskId ? { ...t, is_completed_today: wasCompleted } : t,
         ),
       );
+      toast.error("Failed to update task");
     }
   };
 
   const remove = async (taskId: number) => {
-    await deleteTask(taskId);
-    setTasks((prev) => prev.filter((t) => t.id !== taskId));
+    try {
+      await deleteTask(taskId);
+      setTasks((prev) => prev.filter((t) => t.id !== taskId));
+      toast.success("Task deleted");
+    } catch {
+      toast.error("Failed to delete task");
+    }
   };
 
   return {
     tasks,
+    loading,
     completed: tasks.filter((t) => t.is_completed_today),
     pending: tasks.filter((t) => !t.is_completed_today),
     toggleCompletion,
