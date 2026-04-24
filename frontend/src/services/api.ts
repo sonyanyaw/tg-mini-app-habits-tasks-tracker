@@ -114,10 +114,7 @@ export const fetchTasksByDate = (date: string) =>
 export const addTask = (task: TaskCreate) => api.post<Task>("/tasks/", task);
 
 export const updateTask = (taskId: number, taskUpdate: TaskUpdate) =>
-  api.put<Task>(`/tasks/${taskId}`, taskUpdate);
-
-export const updateTaskCompletion = (taskId: number, completed: boolean) =>
-  api.put<Task>(`/tasks/${taskId}`, { completed });
+  api.patch<Task>(`/tasks/${taskId}`, taskUpdate);
 
 export const completeTaskForDate = (taskId: number, completed_date: string) =>
   api.post<TaskCompletion>(`/tasks/${taskId}/completion/`, { completed_date });
