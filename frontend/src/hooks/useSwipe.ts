@@ -12,29 +12,35 @@ export const useSwipe = ({
   threshold = 50,
 }: SwipeHandlers) => {
   const touchStartX = useRef<number>(0);
+  const touchStartY = useRef<number>(0);
   const touchEndX = useRef<number>(0);
+  const touchEndY = useRef<number>(0);
 
   const onTouchStart = (e: TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    // Seed end at start so a tap (no move) has diff = 0
+    touchEndX.current = e.touches[0].clientX;
+    touchEndY.current = e.touches[0].clientY;
   };
 
   const onTouchMove = (e: TouchEvent) => {
     touchEndX.current = e.touches[0].clientX;
+    touchEndY.current = e.touches[0].clientY;
   };
 
   const onTouchEnd = () => {
-    if (touchStartX.current == null || touchEndX.current == null) return;
+    const diffX = touchStartX.current - touchEndX.current;
+    const diffY = touchStartY.current - touchEndY.current;
 
-    const diff = touchStartX.current - touchEndX.current;
+    // Ignore if movement is primarily vertical (scrolling)
+    if (Math.abs(diffY) > Math.abs(diffX)) return;
 
-    if (diff > threshold) {
+    if (diffX > threshold) {
       onSwipeLeft();
-    } else if (diff < -threshold) {
+    } else if (diffX < -threshold) {
       onSwipeRight();
     }
-
-    touchStartX.current = 0;
-    touchEndX.current = 0;
   };
 
   return { onTouchStart, onTouchMove, onTouchEnd };

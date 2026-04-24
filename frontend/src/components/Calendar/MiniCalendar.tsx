@@ -9,9 +9,10 @@ import "./minicalendar.css";
 
 interface MiniCalendarProps {
   onDateSelect?: (date: Date) => void;
+  onWeekChange?: (weekStart: Date) => void;
 }
 
-const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect }) => {
+const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect, onWeekChange }) => {
   const {
     weekDays,
     isDayActive,
@@ -22,7 +23,7 @@ const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect }) => {
     goToPrevWeek,
     goToCurrentWeek,
     handleDayClick,
-  } = useMiniCalendar({ onDateSelect });
+  } = useMiniCalendar({ onDateSelect, onWeekChange });
 
   const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
     onSwipeLeft: goToNextWeek,
@@ -40,7 +41,7 @@ const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect }) => {
             onClick={goToCurrentWeek}
             disabled={isAnimating}
           >
-            Вернуться к текущей неделе
+            Back to today
           </button>
         )}
       </div>
@@ -50,7 +51,7 @@ const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect }) => {
           className="nav-button prev-week"
           onClick={goToPrevWeek}
           disabled={isAnimating}
-          aria-label="Предыдущая неделя"
+          aria-label="Previous week"
         >
           <ArrowIcon direction="left" />
         </button>
@@ -81,7 +82,7 @@ const MiniCalendar: React.FC<MiniCalendarProps> = ({ onDateSelect }) => {
           className="nav-button next-week"
           onClick={goToNextWeek}
           disabled={isAnimating}
-          aria-label="Следующая неделя"
+          aria-label="Next week"
         >
           <ArrowIcon direction="right" />
         </button>

@@ -17,13 +17,15 @@ interface DayInfo {
 interface UseMiniCalendarProps {
   initialDate?: Date;
   onDateSelect?: (date: Date) => void;
+  onWeekChange?: (weekStart: Date) => void;
 }
 
 export const useMiniCalendar = ({
   initialDate = new Date(),
   onDateSelect,
+  onWeekChange,
 }: UseMiniCalendarProps) => {
-  const [activeDay, setActiveDay] = useState<Date>(initialDate);
+  const [activeDay, setActiveDay] = useState<Date | null>(initialDate);
   const [currentWeekStart, setCurrentWeekStart] = useState<Date>(
     getMonday(initialDate),
   );
@@ -41,12 +43,22 @@ export const useMiniCalendar = ({
 
   const goToNextWeek = () => {
     if (isAnimating) return;
-    animate("left", () => setCurrentWeekStart(addDays(currentWeekStart, 7)));
+    const newWeekStart = addDays(currentWeekStart, 7);
+    animate("left", () => {
+      setCurrentWeekStart(newWeekStart);
+      setActiveDay(null);
+      onWeekChange?.(newWeekStart);
+    });
   };
 
   const goToPrevWeek = () => {
     if (isAnimating) return;
-    animate("right", () => setCurrentWeekStart(addDays(currentWeekStart, -7)));
+    const newWeekStart = addDays(currentWeekStart, -7);
+    animate("right", () => {
+      setCurrentWeekStart(newWeekStart);
+      setActiveDay(null);
+      onWeekChange?.(newWeekStart);
+    });
   };
 
   const goToCurrentWeek = () => {
@@ -54,15 +66,15 @@ export const useMiniCalendar = ({
     const today = new Date();
 
     setActiveDay(today);
-    if (onDateSelect) {
-      onDateSelect(today);
-    }
+    onDateSelect?.(today);
 
     if (isSameWeek(todayMonday, currentWeekStart)) return;
 
     const direction = todayMonday > currentWeekStart ? "left" : "right";
-
-    animate(direction, () => setCurrentWeekStart(todayMonday));
+    animate(direction, () => {
+      setCurrentWeekStart(todayMonday);
+      onWeekChange?.(todayMonday);
+    });
   };
 
   const animate = (direction: "left" | "right", callback: () => void) => {
@@ -78,17 +90,12 @@ export const useMiniCalendar = ({
 
   const handleDayClick = (date: Date) => {
     if (isAnimating) return;
-
-    // const clickedDay = weekDays.find((day) => day.monthday === monthday);
-    if (date) {
-      setActiveDay(date);
-      if (onDateSelect) {
-        onDateSelect?.(date);
-      }
-    }
+    setActiveDay(date);
+    onDateSelect?.(date);
   };
 
-  const isDayActive = (day: DayInfo) => isSameDate(day.date, activeDay);
+  const isDayActive = (day: DayInfo) =>
+    activeDay !== null && isSameDate(day.date, activeDay);
 
   return {
     weekDays,
