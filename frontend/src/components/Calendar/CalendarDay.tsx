@@ -2,7 +2,6 @@ import React, { useState, useMemo } from "react";
 import "./calendarday.css";
 
 interface CalendarDayProps {
-  key: string;
   className?: string;
   weekday: number;
   monthday: number;
@@ -11,7 +10,6 @@ interface CalendarDayProps {
 }
 
 const CalendarDay: React.FC<CalendarDayProps> = ({
-  key,
   className,
   weekday,
   monthday,
@@ -48,7 +46,7 @@ const CalendarDay: React.FC<CalendarDayProps> = ({
   };
 
   return (
-    <div key={key} className={className}>
+    <div className={className}>
       <div
         className={`calendar-day ${isActive ? "calendar-day--active" : ""}`}
         onClick={handleClick}
