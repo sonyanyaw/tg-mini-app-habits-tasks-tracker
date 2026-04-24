@@ -1,0 +1,113 @@
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.sk {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #252525 25%, #303030 50%, #252525 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+.sk-title {
+  height: 14px;
+  width: 55%;
+}
+
+.sk-badge {
+  height: 22px;
+  width: 44px;
+  border-radius: 12px;
+}
+
+.sk-check {
+  height: 28px;
+  border-radius: 6px;
+}
+
+.sk-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.sk-task-title {
+  height: 13px;
+}
+
+/* Stats skeletons */
+.sk-summary-value {
+  height: 28px;
+  width: 48px;
+  margin: 0 auto 6px;
+}
+
+.sk-summary-label {
+  height: 11px;
+  width: 70px;
+  margin: 0 auto;
+}
+
+.sk-stat-title {
+  height: 14px;
+  width: 50%;
+}
+
+.sk-streak-badge {
+  height: 20px;
+  width: 36px;
+  border-radius: 10px;
+}
+
+.sk-week-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sk-progress {
+  height: 6px;
+  border-radius: 3px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.sk-rate-label {
+  height: 11px;
+  width: 55%;
+  margin-top: 6px;
+}
+
+/* Calendar skeleton */
+.sk-cal-day {
+  height: 44px;
+  border-radius: 8px;
+}
+
+/* Settings skeleton */
+.sk-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sk-profile-name {
+  height: 16px;
+  width: 120px;
+  margin-bottom: 6px;
+}
+
+.sk-profile-username {
+  height: 12px;
+  width: 80px;
+}
+
+.sk-settings-row {
+  height: 20px;
+  width: 100%;
+  border-radius: 4px;
+}
