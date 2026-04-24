@@ -81,8 +81,8 @@ export const formatMonthYearRange = (weekDays: { date: Date }[]) => {
   const first = weekDays[0].date;
   const last = weekDays[6].date;
 
-  const firstMonth = first.toLocaleDateString("ru-RU", { month: "long" });
-  const lastMonth = last.toLocaleDateString("ru-RU", { month: "long" });
+  const firstMonth = first.toLocaleDateString("en-US", { month: "long" });
+  const lastMonth = last.toLocaleDateString("en-US", { month: "long" });
 
   const year = first.getFullYear();
 

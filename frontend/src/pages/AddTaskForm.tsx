@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { addTask, type TaskCreate, type Task } from '../services/api'; 
+import { addTask, type TaskCreate, type Task } from '../services/api';
+import { toast } from '../utils/toast';
+import { formatLocalDate } from '../utils/date';
 import './add.css';
 
 interface AddTaskFormProps {
@@ -12,7 +14,7 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel
   // const [taskAdded, setTaskAdded] = useState({});
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
-  const [newTaskDueDate, setNewTaskDueDate] = useState(new Date().toISOString().split('T')[0]); 
+  const [newTaskDueDate, setNewTaskDueDate] = useState(formatLocalDate(new Date()));
 
   const handleAddTask = async (e: React.FormEvent) => {
     console.log("handleAddTask called");
@@ -27,17 +29,13 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel
     };
     console.log('add task', newTaskData)
     try {
-      // Вызываем API функцию addTask
       const response = await addTask(newTaskData);
-      // Передаём полученный полный объект Task в onTaskAdded
       onTaskAdded(response.data);
-      // setTaskAdded(response.data)
-      // Закрываем форму после успешного добавления
-      if (onCancel) {
-          onCancel();
-      }
+      toast.success("Task added!");
+      if (onCancel) onCancel();
     } catch (error) {
       console.error('Error adding task:', error);
+      toast.error("Failed to add task");
     }
   };
 

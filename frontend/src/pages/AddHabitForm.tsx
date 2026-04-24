@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { type HabitCreate, type Habit, addHabit } from '../services/api';
+import { toast } from '../utils/toast';
 import './add.css';
 
 interface AddHabitFormProps {
@@ -28,18 +29,13 @@ const AddHabitForm: React.FC<AddHabitFormProps> = ({ onHabitAdded, onBack, onCan
     };
     console.log('add habit', newHabitData)
     try {
-      // Вызываем API функцию addHabit
       const response = await addHabit(newHabitData);
-      // Передаём полученный полный объект Habit в onHabitAdded
       onHabitAdded(response.data);
-      console.log(response, response.data)
-      // Закрываем форму после успешного добавления
-      if (onCancel) {
-          onCancel();
-      }
+      toast.success("Habit created!");
+      if (onCancel) onCancel();
     } catch (error) {
       console.error('Error adding habit:', error);
-      // Здесь можно добавить отображение ошибки пользователю
+      toast.error("Failed to create habit");
     }
   };
 

@@ -26,33 +26,14 @@ const AddItemPage: React.FC<AddItemPageProps> = ({ onTaskAdded, onHabitAdded, on
   };
 
   // Обновляем handleTaskAdded
-  const handleTaskAdded = async (taskData: Task) => { // Принимаем TaskCreate, а не Omit<Task, ...>
-    // console.log("handleTaskAdded called", taskData);
-    try {
-      // const response = await addTask(taskData);
-      if (onTaskAdded) {
-        onTaskAdded(taskData);
-      }
-      if (onCancel) {
-        onCancel();
-      }
-    } catch (error) {
-      console.error('Error adding task:', error);
-    }
+  const handleTaskAdded = (taskData: Task) => {
+    if (onTaskAdded) onTaskAdded(taskData);
+    // onCancel is called by AddTaskForm after success — don't call again here
   };
 
-  const handleHabitAdded = async (habitData: Habit) => {
-    // console.log("handleHabitAdded called", habitData);
-    try {
-      if (onHabitAdded) {
-        onHabitAdded(habitData);
-      }
-      if (onCancel) {
-        onCancel();
-      }
-    } catch (error) {
-      console.error('Error adding habit:', error);
-    }
+  const handleHabitAdded = (habitData: Habit) => {
+    if (onHabitAdded) onHabitAdded(habitData);
+    // onCancel is called by AddHabitForm after success — don't call again here
   };
 
   const handleCancel = () => {
