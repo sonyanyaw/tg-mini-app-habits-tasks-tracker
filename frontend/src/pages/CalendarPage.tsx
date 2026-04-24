@@ -76,7 +76,7 @@ const CalendarPage: React.FC = () => {
   const prevMonth = () => setViewMonth(new Date(year, month - 1, 1));
   const nextMonth = () => setViewMonth(new Date(year, month + 1, 1));
 
-  const renderTask = (task: Task, dateStr: string) => (
+  const renderTask = (task: Task) => (
     <li key={task.id} className={`cal-task-item ${task.is_completed_today ? 'cal-task-item--done' : ''}`}>
       <input
         type="checkbox"
@@ -100,7 +100,7 @@ const CalendarPage: React.FC = () => {
     </li>
   );
 
-  const selectedDateStr = formatLocalDate(selectedDay);
+  // const selectedDateStr = formatLocalDate(selectedDay);
   const hasTasks = pending.length > 0 || completed.length > 0;
 
   return (
@@ -171,11 +171,11 @@ const CalendarPage: React.FC = () => {
             </div>
           ) : (
             <ul className="cal-task-list">
-              {pending.map(t => renderTask(t, selectedDateStr))}
+              {pending.map(t => renderTask(t))}
               {completed.length > 0 && (
                 <>
                   <li className="cal-completed-label">Completed ({completed.length})</li>
-                  {completed.map(t => renderTask(t, selectedDateStr))}
+                  {completed.map(t => renderTask(t))}
                 </>
               )}
             </ul>
