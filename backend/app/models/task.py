@@ -22,11 +22,13 @@ class Task(Base):
     due_date: Mapped[date] = mapped_column(Date, default=date.today)
     
     recurrence_type: Mapped[RecurrenceType] = mapped_column(
-        Enum(RecurrenceType, name='recurrencetype', create_type=False), 
+        Enum(RecurrenceType, name='recurrencetype', create_type=False),
         nullable=True
     )
-    recurrence_days: Mapped[str | None] = mapped_column(String, nullable=True)  
-    recurrence_end_date: Mapped[date | None] = mapped_column(Date, nullable=True)  
+    recurrence_days: Mapped[str | None] = mapped_column(String, nullable=True)
+    recurrence_end_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+
+    category: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     
