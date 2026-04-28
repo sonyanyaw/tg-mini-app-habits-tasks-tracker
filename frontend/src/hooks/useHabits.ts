@@ -9,7 +9,7 @@ import {
 import { formatLocalDate } from "../utils/date";
 import { toast } from "../utils/toast";
 
-function calcStreak(completions: HabitCompletion[]): number {
+export function calcStreak(completions: HabitCompletion[]): number {
   const done = new Set(completions.filter(c => c.completed).map(c => c.completion_date));
   const today = new Date();
   const todayStr = formatLocalDate(today);
