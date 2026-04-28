@@ -15,6 +15,18 @@ interface TasksSectionProps {
   onDelete: (taskId: number) => void;
 }
 
+const CATEGORY_COLORS: Record<string, { bg: string; color: string }> = {
+  work:     { bg: 'rgba(74,158,218,0.13)',  color: '#4a9eda' },
+  personal: { bg: 'rgba(76,175,125,0.13)',  color: '#4caf7d' },
+  health:   { bg: 'rgba(255,152,0,0.13)',   color: '#ff9800' },
+  study:    { bg: 'rgba(156,111,222,0.13)', color: '#9c6fde' },
+};
+
+function categoryStyle(cat: string) {
+  const key = cat.toLowerCase();
+  return CATEGORY_COLORS[key] ?? { bg: 'rgba(136,136,136,0.13)', color: '#888' };
+}
+
 function isOverdue(task: Task): boolean {
   if (task.is_completed_today || !task.due_date || task.recurrence_type) return false;
   const today = formatLocalDate(new Date());
@@ -42,6 +54,14 @@ const TasksSection: React.FC<TasksSectionProps> = ({
           <span className={`task-text ${task.is_completed_today ? 'task-text--done' : ''}`}>
             {task.title}
           </span>
+          {task.category && (
+            <span
+              className="task-category-badge"
+              style={categoryStyle(task.category)}
+            >
+              {task.category}
+            </span>
+          )}
           {isOverdue(task) && (
             <span className="task-overdue-badge">Overdue</span>
           )}

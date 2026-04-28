@@ -94,6 +94,16 @@
   min-width: 0;
 }
 
+.task-category-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: lowercase;
+}
+
 .task-overdue-badge {
   font-size: 0.65rem;
   font-weight: 700;
