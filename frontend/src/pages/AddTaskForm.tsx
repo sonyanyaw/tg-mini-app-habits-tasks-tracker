@@ -10,24 +10,25 @@ interface AddTaskFormProps {
   onCancel?: () => void;
 }
 
+const CATEGORY_PRESETS = ['Work', 'Personal', 'Health', 'Study'];
+
 const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel }) => {
-  // const [taskAdded, setTaskAdded] = useState({});
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [newTaskDescription, setNewTaskDescription] = useState('');
   const [newTaskDueDate, setNewTaskDueDate] = useState(formatLocalDate(new Date()));
+  const [category, setCategory] = useState('');
 
   const handleAddTask = async (e: React.FormEvent) => {
-    console.log("handleAddTask called");
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
-    // Создаём объект данных для отправки
     const newTaskData: TaskCreate = {
       title: newTaskTitle,
       description: newTaskDescription,
       due_date: newTaskDueDate,
+      category: category.trim() || undefined,
     };
-    console.log('add task', newTaskData)
+
     try {
       const response = await addTask(newTaskData);
       onTaskAdded(response.data);
@@ -40,27 +41,17 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel
   };
 
   const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
-    }
+    if (onCancel) onCancel();
   };
 
   return (
     <div className="add-task-page">
       <div className="add-task-header">
-        <div className="header-buttons">
-            <button className="back-button" onClick={onBack}>
-            ← Back
-            </button>
-            <div className='cancel-adding-task'>
-            {onCancel && (
-                <button className="cancel-button" onClick={handleCancel}>
-                ✕
-                </button>
-            )}
-            </div>
-        </div>
+        <button className="back-button" onClick={onBack}>← Back</button>
         <h2 className="page-title">Add New Task</h2>
+          {onCancel
+          ? <button className="cancel-button" onClick={handleCancel}>✕</button>
+          : <div className="header-spacer" />}
       </div>
 
       <form className="add-task-form" onSubmit={handleAddTask}>
@@ -86,7 +77,32 @@ const AddTaskForm: React.FC<AddTaskFormProps> = ({ onTaskAdded, onBack, onCancel
             placeholder="Enter task description (optional)..."
             value={newTaskDescription}
             onChange={(e) => setNewTaskDescription(e.target.value)}
-            rows={6}
+            rows={3}
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Category</label>
+          <div className="category-presets">
+            {CATEGORY_PRESETS.map(preset => (
+              <button
+                key={preset}
+                type="button"
+                className={`category-chip ${category === preset ? 'category-chip--active' : ''}`}
+                onClick={() => setCategory(category === preset ? '' : preset)}
+              >
+                {preset}
+              </button>
+            ))}
+          </div>
+          <input
+            id="task-category"
+            type="text"
+            className="add-task-input"
+            placeholder="Or type a custom category..."
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            maxLength={50}
           />
         </div>
 

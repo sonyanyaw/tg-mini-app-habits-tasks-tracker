@@ -4,7 +4,6 @@ import { toast } from '../utils/toast';
 import './add.css';
 
 interface AddHabitFormProps {
-  // onHabitAdded теперь должен принимать полный объект Habit
   onHabitAdded: (habit: Habit) => void;
   onBack: () => void;
   onCancel?: () => void;
@@ -50,19 +49,11 @@ const AddHabitForm: React.FC<AddHabitFormProps> = ({ onHabitAdded, onBack, onCan
   return (
     <div className="add-task-page">
       <div className="add-task-header">
-        <div className="header-buttons">
-            <button className="back-button" onClick={onBack}>
-            ← Back
-            </button>
-            <div className='cancel-adding-task'>
-            {onCancel && (
-                <button className="cancel-button" onClick={handleCancel}>
-                ✕
-                </button>
-            )}
-            </div>
-        </div>
+        <button className="back-button" onClick={onBack}>← Back</button>
         <h2 className="page-title">Add New Habit</h2>
+        {onCancel
+          ? <button className="cancel-button" onClick={handleCancel}>✕</button>
+          : <div className="header-spacer" />}
       </div>
 
       <form className="add-task-form" onSubmit={handleAddHabit}>
@@ -88,7 +79,7 @@ const AddHabitForm: React.FC<AddHabitFormProps> = ({ onHabitAdded, onBack, onCan
             placeholder="Enter habit description (optional)..."
             value={newHabitDescription}
             onChange={(e) => setNewHabitDescription(e.target.value)}
-            rows={6}
+            rows={3}
           />
         </div>
 
