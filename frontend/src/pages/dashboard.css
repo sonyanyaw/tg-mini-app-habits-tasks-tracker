@@ -1,5 +1,5 @@
 .dashboard-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -12,12 +12,79 @@
 .dashboard-content {
   flex: 1;
   overflow-y: auto;
-  padding: 10px 12px 90px;
+  overscroll-behavior: contain;
   width: 100%;
   box-sizing: border-box;
   scrollbar-gutter: stable;
   scrollbar-color: #2a2a2a #181818;
   scrollbar-width: thin;
+}
+
+/* ── Dashboard header ── */
+.dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 2px 12px;
+  gap: 10px;
+}
+
+.dash-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dash-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7e57c2, #9c6fde);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.dash-greeting {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dash-greeting-sub {
+  font-size: 0.72rem;
+  color: #888;
+  line-height: 1.2;
+}
+
+.dash-greeting-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.dash-streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.25);
+  border-radius: 20px;
+  padding: 5px 11px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ff9800;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .habits-section {
@@ -50,7 +117,7 @@
 }
 
 .fab-add {
-  position: fixed;
+  position: absolute;
   bottom: 90px;
   right: 20px;
   width: 52px;
