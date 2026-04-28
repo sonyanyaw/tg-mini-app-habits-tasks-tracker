@@ -1,13 +1,13 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
 
 .App {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 480px;
   height: 100%;
+  position: relative;
 }
