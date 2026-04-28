@@ -26,6 +26,7 @@ export interface Task {
   recurrence_days?: string;
   recurrence_end_date?: string;
 
+  category?: string;
   created_at: string;
   is_completed_today?: boolean;
   completions: TaskCompletion[];
@@ -38,6 +39,7 @@ export interface TaskCreate {
   recurrence_type?: RecurrenceType;
   recurrence_days?: string;
   recurrence_end_date?: string;
+  category?: string;
 }
 
 export interface TaskUpdate {
@@ -45,6 +47,7 @@ export interface TaskUpdate {
   description?: string;
   completed?: boolean;
   due_date?: string;
+  category?: string;
 }
 
 export interface TaskCompletion {
@@ -114,7 +117,10 @@ export const fetchTasksByDate = (date: string) =>
 export const addTask = (task: TaskCreate) => api.post<Task>("/tasks/", task);
 
 export const updateTask = (taskId: number, taskUpdate: TaskUpdate) =>
-  api.patch<Task>(`/tasks/${taskId}`, taskUpdate);
+  api.put<Task>(`/tasks/${taskId}`, taskUpdate);
+
+export const updateTaskCompletion = (taskId: number, completed: boolean) =>
+  api.put<Task>(`/tasks/${taskId}`, { completed });
 
 export const completeTaskForDate = (taskId: number, completed_date: string) =>
   api.post<TaskCompletion>(`/tasks/${taskId}/completion/`, { completed_date });
