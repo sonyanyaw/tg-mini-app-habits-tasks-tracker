@@ -12,6 +12,9 @@
 .dashboard-content {
   flex: 1;
   overflow-y: auto;
+  /* Top padding accounts for Telegram's overlay buttons in fullscreen mode.
+     --tg-content-safe-area-inset-top is provided by the Telegram client; */
+  padding: calc(env(safe-area-inset-top, 0px) + var(--tg-content-safe-area-inset-top, 0px) + 5px) 12px 90px;
   overscroll-behavior: contain;
   width: 100%;
   box-sizing: border-box;
